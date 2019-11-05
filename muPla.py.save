@@ -1,0 +1,62 @@
+import os, vlc
+import youtube_dl
+from requests_html import HTMLSession
+
+	
+
+cuteGirl = None
+playSong = "loxinghxn.mp3"
+p = vlc.MediaPlayer(playSong)
+print(__file__)
+while cuteGirl  != "dexd":
+	cuteGirl = input("muPla;list,song,stop: ")
+	dirContents = [item for item in os.listdir() if item != __file__]
+	if cuteGirl == "list":
+		for song in dirContents:
+			print(song)
+	elif cuteGirl == "song":
+		fileSearch = input("GiveSong: ")
+		playSong = "loxinghxn"
+		for elem in dirContents:
+			if str.lower(fileSearch) in str.lower(elem):
+				p.stop()
+				playSong = elem
+				p = vlc.MediaPlayer(playSong)
+				p.play()
+				print("now playing: " + playSong)
+				break
+
+	elif cuteGirl == "stop":
+		if vlc.State._enum_names_[p.get_state()] == "Playing":
+			p.stop()
+	elif cuteGirl == "pause":
+		if vlc.State._enum_names_[p.get_state()] == "Playing":
+			p.pause()
+	elif cuteGirl == "resume":
+		if vlc.State._enum_names_[p.get_state()] == "Paused":
+			p.pause()
+	elif cuteGirl == "restart":
+		p.set_time(0)
+	elif cuteGirl == "play":
+		p.play()
+		
+	elif cuteGirl == search:
+            session = HTMLSession()
+    
+            searchit = input("Gimme the song name and or artist: ")
+            page_link = "https://soundcloud.com/search?q="+searchit.replace(" ","%20")
+
+            r = session.get(page_link)
+
+            choices = [x for x in r.html.absolute_links if "https://soundcloud.com/" in x and x not in ["https://soundcloud.com/","https://soundcloud.com/search","https://soundcloud.com/search/sounds","https://soundcloud.com/search/sets","https://soundcloud.com/search/people","https://soundcloud.com/popular/searches"]]
+            for item in choices:
+                print(item.lstrip("https://soundcloud.com/"))
+            download = input("Which one or None?")
+            try:
+                finalChoice = choices[int(download)]
+                print("YES:")
+                ydl_opts = {}
+                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                    ydl.download([finalChoice])
+            except (IndexError, ValueError):
+                print("Not a valid link :(")
